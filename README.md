@@ -2,43 +2,26 @@
 
 A Docker Compose setup for deploying [Grist](https://www.getgrist.com/) (open-source collaborative spreadsheet) behind an OpenResty reverse proxy with custom Lua-based authentication.
 
-## Architecture
-
-```
-┌──────────────┐          ┌──────────────────────┐          ┌──────────────┐
-│   Clients    │──HTTP/S─▶│  OpenResty (nginx)   │──proxy──▶│   Grist OSS  │
-│              │          │  172.63.63.20        │  :8484   │  172.63.63.10│
-└──────────────┘          └──────────────────────┘          └──────┬───────┘
-                          │ serves /_static/                 ┌─────▼──────┐
-                          │ handles /login, /logout          │  persist/  │
-                          │ handles /credentials             │  (SQLite)  │
-                          │ ACME/Let's Encrypt               └────────────┘
-```
-
-| Service   | Image                              | Role                                            |
-|-----------|------------------------------------|-------------------------------------------------|
-| **nginx** | `openresty/openresty:alpine` (custom build) | HTTPS termination, authentication, static files |
-| **grist** | `gristlabs/grist-oss:latest`       | Grist application (port 8484)                   |
-
 ## Quick Start
 
 0. **Install Docker, Docker Compose, and htpasswd**
 
 - Docker / Docker Compose: cf. [Docker documentation](https://docs.docker.com/engine/install/debian/)
 - htpasswd: `apt install apache2-utils`
-
+ 
 1. **Copy and edit the environment file:**
    ```sh
    cp .env.sample .env
    # Edit .env with your domain, email, SSL settings, etc.
    ```
+   **N.B.:** Ensure your domain name (as set in `.env`) points to your server's public IP address (A/AAAA records).
 
 2. **Create the users file** (or copy the sample):
    ```sh
    cp users.sample users
    # Add users with htpasswd. Must contain at least the email defined in .env:
    htpasswd users user@example.com
-   htpasswd -D users you@example.com
+   htpasswd -D users you@example.com  # remove the example user
    ```
 
 3. **Create the sessions file** (or copy the sample):
@@ -71,6 +54,24 @@ A Docker Compose setup for deploying [Grist](https://www.getgrist.com/) (open-so
    # Assuming docker-ce as per https://docs.docker.com/engine/install/debian/: docker from standard repository behaves a little differently from docker-ce.
    docker compose up -d
    ```
+
+## Architecture
+
+```
+┌──────────────┐          ┌──────────────────────┐          ┌──────────────┐
+│   Clients    │──HTTP/S─▶│  OpenResty (nginx)   │──proxy──▶│   Grist OSS  │
+│              │          │  172.63.63.20        │  :8484   │  172.63.63.10│
+└──────────────┘          └──────────────────────┘          └──────┬───────┘
+                          │ serves /_static/                 ┌─────▼──────┐
+                          │ handles /login, /logout          │  persist/  │
+                          │ handles /credentials             │  (SQLite)  │
+                          │ ACME/Let's Encrypt               └────────────┘
+```
+
+| Service   | Image                              | Role                                            |
+|-----------|------------------------------------|-------------------------------------------------|
+| **nginx** | `openresty/openresty:alpine` (custom build) | HTTPS termination, authentication, static files |
+| **grist** | `gristlabs/grist-oss:latest`       | Grist application (port 8484)                   |
 
 ## Configuration
 
