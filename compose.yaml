@@ -1,0 +1,70 @@
+services:
+  nginx:
+    build: openresty
+    image: grist-nginx
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.63.63.20
+    #ports:
+      #- 1080:80
+      #- 1443:443
+    volumes:
+      - ./nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./users:/etc/nginx/users:rw
+      - ./sessions:/etc/nginx/sessions:rw
+      - ./persist:/srv/persist:ro
+      - ${SSL_CERT}:/etc/nginx/ssl.d/cert.pem:ro
+      - ${SSL_KEY}:/etc/nginx/ssl.d/key.pem:ro
+      - ./_static/:/srv/_static/:ro
+    environment:
+      - EMAIL=${EMAIL}
+      - DOMAIN=${DOMAIN}
+      - STAGING=${STAGING}
+      - HTTPS=${HTTPS}
+
+#  widgets:
+#    build: widgets
+#    restart: unless-stopped
+#    ports: [8585:8585]
+
+  grist:
+    image: gristlabs/grist-oss:latest
+    networks:
+      default:
+        ipv4_address: 172.63.63.10
+    ports: [8484:8484]
+    volumes:
+      - ./persist/:/persist/:rw
+    restart: unless-stopped
+    environment:
+      - APP_DOC_URL=${URL}
+      - APP_HOME_URL=${URL}
+      - DEBUG=${DEBUG}
+      - GRIST_TELEMETRY_LEVEL=${TELEMETRY}
+      - APP_DOC_INTERNAL_URL=http://127.0.0.1:8484
+      - GRIST_ADAPT_DOMAIN=true
+      - COMMENTS=true
+      - GRIST_FORWARD_AUTH_HEADER=x-forwarded-user
+      - GRIST_IGNORE_SESSION=1
+      - GRIST_SINGLE_ORG=${ORG}
+      - GRIST_DEFAULT_LOCALE=fr-FR
+      - GRIST_EXPERIMENTAL_PLUGINS=true
+      - GRIST_BACKUP_DELAY_SECS=600
+      - GRIST_DEFAULT_EMAIL=j@prn.ovh
+      - GRIST_NEW_COLUMN_MENU=true
+      - GRIST_SUPPORT_ANON=true
+      - GRIST_SERVE_SAME_ORIGIN=true
+      - GRIST_USER_ROOT=/
+      - GRIST_TRUST_PLUGINS=true
+      - GRIST_WIDGET_LIST_URL=${WIDGETS_URL}
+      - NODE_TLS_REJECT_UNAUTHORIZED="0"
+      - PERMITTED_CUSTOM_WIDGETS=calendar
+      - NODE_OPTIONS="--max-old-space-size=8192"
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.63.63.0/24"

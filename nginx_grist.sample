@@ -1,0 +1,32 @@
+ssl_certificate /etc/letsencrypt/live/db.MY.DOMAIN/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/db.MY.DOMAIN/privkey.pem;
+server {
+    listen 80;
+    server_name db.MY.DOMAIN;
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
+}
+server {
+    listen 443 ssl;
+    server_name db.MY.DOMAIN;
+    proxy_connect_timeout 900;
+    proxy_send_timeout 900;
+    proxy_read_timeout 900;
+    send_timeout 900;
+    location /robots.txt {
+        add_header Content-Type text/plain;
+        return 200 "User-agent: *\nDisallow: /\n";
+    }
+    location /.well-known/acme-challenge/ { alias /var/www/.well-known/acme-challenge/; }
+    location / {
+        proxy_pass http://172.63.63.20;  # Point to the Openresty container ip (cf. compose.yaml)
+        include /etc/nginx/proxy_params;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Connection $http_connection;
+
+    }
+    client_max_body_size 1024M;
+}

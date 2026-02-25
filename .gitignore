@@ -1,0 +1,12 @@
+.env
+users
+sessions
+persist/*
+_static/*
+!_static/.keep
+/ssl/*
+!/ssl/.keep
+!/ssl/cert.pem
+!/ssl/key.pem
+*.save
+compose.override.yaml
