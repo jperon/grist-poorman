@@ -93,8 +93,22 @@ A Docker Compose setup for deploying [Grist](https://www.getgrist.com/) (open-so
 
 ### HTTPS Modes
 
-- **`auto`**: Certificates are automatically obtained and renewed via Let's Encrypt (using `lua-resty-acme`).
+- **`auto`**: Certificates are automatically obtained and renewed via ACME (using `lua-resty-acme`).
 - **`manual`**: Provide your own certificate and key via `SSL_CERT` and `SSL_KEY`.
+
+### ACME Providers
+
+When `HTTPS=auto`, you can choose between several providers via the `ACME_PROVIDER` variable:
+
+- **`letsencrypt`** (Default): Standard rate limits apply.
+- **`actalis`**: Free SSL certificates from Actalis. Requires **EAB** credentials.
+  - [Actalis ACME Documentation](https://www.actalis.com/en/acme-service)
+- **`zerossl`**: Requires **External Account Binding (EAB)** credentials. 
+  - [ZeroSSL EAB Documentation](https://zerossl.com/documentation/acme/)
+- **`google`**: Google Trust Services. Requires **EAB** credentials from Google Cloud.
+  - [GTS EAB Documentation](https://cloud.google.com/public-certificate-authority/docs/how-to/request-eab-key)
+
+For Actalis, ZeroSSL and Google, you must set `EAB_KID` and `EAB_HMAC_KEY` in your `.env`.
 
 ## Authentication
 

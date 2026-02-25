@@ -22,6 +22,9 @@ services:
       - DOMAIN=${DOMAIN}
       - STAGING=${STAGING}
       - HTTPS=${HTTPS}
+      - ACME_PROVIDER=${ACME_PROVIDER}
+      - EAB_KID=${EAB_KID}
+      - EAB_HMAC_KEY=${EAB_HMAC_KEY}
 
 #  widgets:
 #    build: widgets
