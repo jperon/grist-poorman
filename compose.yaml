@@ -16,6 +16,7 @@ services:
       - ./persist:/srv/persist:ro
       - ${SSL_CERT}:/etc/nginx/ssl.d/cert.pem:ro
       - ${SSL_KEY}:/etc/nginx/ssl.d/key.pem:ro
+      - ./persist/acme:/etc/nginx/acme:rw
       - ./_static/:/srv/_static/:ro
     environment:
       - EMAIL=${EMAIL}

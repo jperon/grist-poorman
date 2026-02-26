@@ -100,11 +100,11 @@ Lorsque `HTTPS=auto`, vous pouvez choisir entre plusieurs fournisseurs via la va
 
 - **`letsencrypt`** (Défaut) : Les limites de fréquence standard s'appliquent.
 - **`actalis`** : Certificats SSL gratuits d'Actalis. Nécessite des identifiants **EAB**.
-  - [Documentation ACME Actalis](https://www.actalis.com/en/acme-service)
+  - [Documentation ACME Actalis](https://guide.actalis.com/ssl/activation/acme)
 - **`zerossl`** : Nécessite des identifiants **External Account Binding (EAB)**.
   - [Documentation EAB ZeroSSL](https://zerossl.com/documentation/acme/)
 - **`google`** : Google Trust Services. Nécessite des identifiants **EAB** de Google Cloud.
-  - [Documentation EAB GTS](https://cloud.google.com/public-certificate-authority/docs/how-to/request-eab-key)
+  - [Documentation EAB GTS](https://docs.cloud.google.com/certificate-manager/docs/public-ca-tutorial?hl=fr)
 
 Pour Actalis, ZeroSSL et Google, vous devez définir `EAB_KID` et `EAB_HMAC_KEY` dans votre `.env`.
 

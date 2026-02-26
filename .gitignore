@@ -2,6 +2,9 @@
 users
 sessions
 persist/*
+!persist/acme
+persist/acme/*
+!persist/acme/.keep
 _static/*
 !_static/.keep
 /ssl/*

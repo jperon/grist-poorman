@@ -102,11 +102,11 @@ When `HTTPS=auto`, you can choose between several providers via the `ACME_PROVID
 
 - **`letsencrypt`** (Default): Standard rate limits apply.
 - **`actalis`**: Free SSL certificates from Actalis. Requires **EAB** credentials.
-  - [Actalis ACME Documentation](https://www.actalis.com/en/acme-service)
+  - [Actalis ACME Documentation](https://guide.actalis.com/ssl/activation/acme)
 - **`zerossl`**: Requires **External Account Binding (EAB)** credentials. 
   - [ZeroSSL EAB Documentation](https://zerossl.com/documentation/acme/)
 - **`google`**: Google Trust Services. Requires **EAB** credentials from Google Cloud.
-  - [GTS EAB Documentation](https://cloud.google.com/public-certificate-authority/docs/how-to/request-eab-key)
+  - [GTS EAB Documentation](https://docs.cloud.google.com/certificate-manager/docs/public-ca-tutorial)
 
 For Actalis, ZeroSSL and Google, you must set `EAB_KID` and `EAB_HMAC_KEY` in your `.env`.
 
