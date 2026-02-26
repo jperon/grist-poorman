@@ -138,11 +138,6 @@ The `/credentials` endpoint allows managing accounts and passwords:
 | `/logout`      | GET      | Clear persistent session and redirect    |
 | `/credentials` | GET/POST | Create account or change passwords       |
 
-
-## Static File Server
-
-A secondary Nginx server block listens on `static-db.*` and serves files from `_static/` with directory listing enabled.
-
 ## Maintenance
 
 Run `grist-maintenance.sh` to:
